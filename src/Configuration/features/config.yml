@@ -1,0 +1,59 @@
+title: Configuration
+description: Applies Starlight configurations
+privilege: TrustedInstaller
+actions:
+
+  # Disable Memory Compression
+  - !powerShell: 
+    command: 'Disable-MMAgent -mc'
+  
+  - !cmd:
+    command: 'setx DOTNET_CLI_TELEMETRY_OPTOUT 1'
+    runas: currentUserElevated
+    
+  - !cmd:
+    command: 'setx POWERSHELL_TELEMETRY_OPTOUT 1'
+    runas: currentUserElevated
+
+  - !writeStatus: {status: "Removing logs"}
+  - !run:
+    exeDir: true
+    exe: "PowerShell"
+    args: '-NoP -ExecutionPolicy Bypass -File clean.ps1'
+    weight: 150
+
+  - !writeStatus: {status: "Finalizing process"}
+  - !registryValue: {path: 'HKCU\System\GameConfigStore', value: 'GameDVR_FSEBehaviorMode', type: REG_DWORD, data: '0', weight: 70}
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications', value: 'GlobalUserDisabled', type: REG_DWORD, data: '1', weight: 60}
+
+  - !powerShell: {command: 'Get-ScheduledTask -TaskPath "\Microsoft\Office\*" | Disable-ScheduledTask'}
+
+   # OneDrive workaround
+  - !registryValue: {path: 'HKLM\Software\Policies\Microsoft\Windows\OneDrive', value: 'DisableFileSyncNGSC', operation: delete}
+
+  - !run:
+    exeDir: true
+    exe: "PowerShell"
+    args: '-NoP -ExecutionPolicy Bypass -File svcgroup.ps1'
+    weight: 50
+
+  - !run: {exeDir: true, exe: "FINALIZE.cmd", weight: 200}
+
+  - !writeStatus: {status: "Configuring features"}
+  - !run:
+    exeDir: true
+    exe: "PowerShell"
+    args: '-NoP -ExecutionPolicy Bypass -File DismFeatures.ps1'
+    weight: 270
+
+    # Necessary to refresh start menu entries etc.
+  - !appx: {operation: clearCache, name: '*Client.CBS*'}
+  - !appx: {operation: clearCache, name: '*StartMenuExperienceHost*'}
+  - !appx: {operation: clearCache, name: '*Windows.Search*'}
+  - !appx: {operation: clearCache, name: '*TCUI*'}
+    # Workaround for KGL versions to match
+  - !appx: {operation: clearCache, name: '*XboxGameCallableUI*'}
+  - !appx: {operation: clearCache, name: '*XboxGameOverlay*'}
+  - !appx: {operation: clearCache, name: '*XboxGamingOverlay*'}
+  - !appx: {operation: clearCache, name: '*XboxIdentityProvider*'}
+  - !appx: {operation: clearCache, name: '*XboxSpeechToTextOverlay*'}

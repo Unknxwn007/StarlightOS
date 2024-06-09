@@ -1,0 +1,34 @@
+title: Components
+description: Remove certain windows components
+privilege: TrustedInstaller
+actions:
+  - !writeStatus: {status: "Removing components"}
+# Microsoft Edge
+  - !writeStatus: {status: "Removing Microsoft Edge", option: "remove-edge"}
+  - !taskKill: {name: "MicrosoftEdgeUpdate", ignoreErrors: true, option: "remove-edge"}
+  - !taskKill: {name: "msedge", ignoreErrors: true, option: "remove-edge"}
+  - !taskKill: {name: "MicrosoftEdge*", ignoreErrors: true, option: "remove-edge"}
+  - !taskKill: {name: "setup", ignoreErrors: true, pathContains: "\\Edge", option: "remove-edge"}
+  
+  - !powerShell:
+    command: '.\FuckEdge.ps1 -Mode EdgeBrowser'
+    exeDir: true
+    runas: currentUserElevated
+    option: "remove-edge"
+    weight: 40
+
+  - !file: {path: "%ProgramFiles(x86)%\\Microsoft\\Edge", option: "remove-edge", weight: 50}
+
+# Allow uninstall of Edge, EdgeUpdate and WebView
+  - !registryValue: {path: 'HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge', value: 'NoRemove', type: REG_DWORD, data: '0'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft Edge Update', value: 'NoRemove', type: REG_DWORD, data: '0'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall\Microsoft EdgeWebView', value: 'NoRemove', type: REG_DWORD, data: '0'}
+
+# OneDrive
+  - !writeStatus: {status: "Removing OneDrive", option: "remove-onedrive"}
+  - !taskKill: {name: "OneDriveStandaloneUpdater", ignoreErrors: true, option: "remove-onedrive"}
+  - !taskKill: {name: "OneDriveSetup", ignoreErrors: true, option: "remove-onedrive"}
+  - !taskKill: {name: "OneDrive*", ignoreErrors: true, option: "remove-onedrive"}
+  - !run: {exeDir: true, exe: "onedrive.cmd", option: "remove-onedrive", weight: 40}
+  - !file: {path: "%SystemDrive%\\OneDriveTemp", option: "remove-onedrive"}
+  - !file: {path: "%ProgramData%\\Microsoft OneDrive", option: "remove-onedrive"}

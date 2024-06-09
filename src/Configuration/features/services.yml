@@ -1,0 +1,22 @@
+title: Services
+description: Removal and configuration of services
+privilege: TrustedInstaller
+actions:
+  - !writeStatus: {status: "Configuring services"}
+  - !service: {name: 'dam', operation: change, startup: 4} # Disable esktop Activity Moderator Driver
+  - !service: {name: 'GpuEnergyDrv', operation: change, startup: 4} # Disable GPU Energy Driver 
+  - !service: {name: 'NetBT', operation: change, startup: 4} # Disable NetBT
+  - !service: {name: 'Telemetry', operation: change, startup: 4} # Disable  Intel(R) Telemetry Service
+  - !service: {name: 'diagnosticshub.standardcollector.service', operation: change, startup: 4} # Disable Microsoft (R) Diagnostics Hub Standard Collector Service
+  - !service: {name: 'WerSvc', operation: change, startup: 4} # Disable Windows Error Reporting Service 
+  - !service: {name: 'DiagTrack', operation: change, startup: 4} # Disable Unified Telemetry Client
+  - !service: {name: 'wisvc', operation: change, startup: 4} # Disable Windows Insider Service 
+  - !service: {name: 'PcaSvc', operation: change, startup: 4} # Disable Program Compatibility Assistant Service
+  - !service: {name: 'DPS', operation: change, startup: 4} # Disable Diagnostic Policy Service
+  - !service: {name: 'WdiServiceHost', operation: change, startup: 4} # Disable Diagnostic Service Host
+  - !service: {name: 'WdiSystemHost', operation: change, startup: 4} # Disable Diagnostic System Host
+  - !service: {name: 'tcpipreg', operation: change, startup: 4} # Disable Tcpipreg (experimental)
+  - !service: {name: 'edgeupdate', operation: change, startup: 3} # EdgeUpdate - Manual
+  - !service: {name: 'Wecsvc', operation: change, startup: 4} #Disable Windows Event Collector
+  - !service: {name: 'UCPD', operation: change, startup: 4} # Disable UCPD velocity
+  - !powerShell: {command: "Disable-ScheduledTask -TaskPath '\\Microsoft\\Windows\\AppxDeploymentClient' -TaskName 'UCPD velocity'"}

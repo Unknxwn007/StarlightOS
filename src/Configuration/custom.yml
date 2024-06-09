@@ -1,0 +1,10 @@
+title: Custom
+description: Custom Starlight configuration
+privilege: Admin
+actions: []
+features:
+- features\appx.yml
+- features\components.yml
+- features\config.yml
+- features\registry.yml
+- features\services.yml
