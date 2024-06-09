@@ -196,7 +196,7 @@ actions:
   - !registryValue: {path: 'HKCU\Control Panel\Mouse', value: 'MouseThreshold1', type: REG_DWORD, data: '0', option: 'configure-mouse'} # Mouse Acceleration
   - !registryValue: {path: 'HKCU\Control Panel\Mouse', value: 'MouseThreshold2', type: REG_DWORD, data: '0', option: 'configure-mouse'} # Mouse Acceleration
   - !registryValue: {path: 'HKCU\Control Panel\International', value: 'sTimeFormat', type: REG_SZ, data: 'HH:mm:ss', option: 'configure-time'}  # 24Hour Time
-  - !registryValue: {path: 'HKCU\Control Panel\International', value: 'sShortTime', type: REG_SZ, data: 'HH:mm"', option: 'configure-time'}  # 24Hour Time
+  - !registryValue: {path: 'HKCU\Control Panel\International', value: 'sShortTime', type: REG_SZ, data: 'HH:mm', option: 'configure-time'}  # 24Hour Time
   - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds', value: 'EnableFeeds', type: REG_DWORD, data: '0'} # Disable the new Weather and News widgets
   - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Feeds', value: 'ShellFeedsTaskbarViewMode', type: REG_DWORD, data: '2'} # Disable the new Weather and News widgets
   - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'TaskbarDa', type: REG_DWORD, data: '0'} # Disable the new Weather and News widgets
