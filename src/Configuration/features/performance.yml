@@ -1,0 +1,79 @@
+title: Performance Optimization
+description: Starlight performance configuration
+actions:
+  - !writeStatus: {status: 'Running performance tweaks'}
+# Disable Modern Standby SleepStudy
+  - !run: {exe: 'wevtutil.exe', args: 'set-log "Microsoft-Windows-SleepStudy/Diagnostic" /e:false'} 
+  - !run: {exe: 'wevtutil.exe', args: 'set-log "Microsoft-Windows-Kernel-Processor-Power/Diagnostic" /e:false' }
+  - !run: { exe: 'wevtutil.exe', args: 'set-log "Microsoft-Windows-UserModePowerService/Diagnostic" /e:false' }
+  - !scheduledTask: {path: '\Microsoft\Windows\Power Efficiency Diagnostics\AnalyzeSystem', operation: disable}
+# Disable Reserved Storage
+  - !run: {exe: 'DISM.exe', args: '/Online /Set-ReservedStorageState /State:Disabled', weight: 30} 
+# Manually rebuilds performance counters to ensure that there is no issues with them
+  - !run: {exe: 'lodctr', args: '/r'} 
+  - !run: {exe: 'lodctr', args: '/r'}
+  - !run: {exe: 'winmgmt', args: '/resyncperf'}
+#  Windows Scheduled Maintenance Task
+  - !scheduledTask: {path: '\Microsoft\Windows\Diagnosis\Scheduled', operation: disable} 
+#  Updates compatibility database
+  - !scheduledTask: {path: '\Microsoft\Windows\Application Experience\PcaPatchDbTask', operation: disable} 
+# UCPD - might not exist on all installs, so ignore errors
+  - !scheduledTask: {path: '\Microsoft\Windows\AppxDeploymentClient\UCPD velocity', operation: disable, ignoreErrors: true} 
+# Set Dualboot description
+  - !run: {exe: 'bcdedit', args: '/set description "StarLightOS 11"', builds: [ '>=22000' ] } 
+# Disables Service Host splitting much for lower RAM usage and process count, excluding XBOX services to fix issues with Game Bar
+  - !powerShell: 
+    command: 'Get-ChildItem "HKLM:\SYSTEM\CurrentControlSet\Services" | ? { $_.Name -notmatch ''Xbl|Xbox'' } | % { $a = Get-ItemProperty -Path "REGISTRY::$_" -EA SilentlyContinue; if ($null -ne $a.Start) { Set-ItemProperty -Path "Registry::$_" -Name "SvcHostSplitDisable" -Type DWORD -Value 1 -Force -EA SilentlyContinue } }'
+    wait: true
+# Optimizes the NTFS filesystem for optimal QoL, performance and privacy
+  - !run: {exe: 'fsutil', args: 'behavior set disablelastaccess 1'} 
+# Disable last access information on directories, performance/privacy & Disable the creation of 8.3 character-length file names on FAT- and NTFS-formatted volumes
+  - !run: {exe: 'fsutil', args: 'behavior set disable8dot3 1'} 
+# Disable PowerShell Core telemetry
+  - !cmd: {command: 'setx POWERSHELL_TELEMETRY_OPTOUT 1'} 
+  - !scheduledTask: { path: '\Microsoft\Windows\DiskCleanup\SilentCleanup', operation: enable}
+# Game bar
+  - !registryValue: { path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\GameDVR', value: 'AppCaptureEnabled', type: REG_DWORD, data: '0', option: 'remove-appx-xbox'}
+  - !registryValue: { path: 'HKCU\System\GameConfigStore', value: 'GameDVR_Enabled', type: REG_DWORD, data: '0'}
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\GameBar', value: 'GamePanelStartupTipIndex', data: '3', type: REG_DWORD } 
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\GameBar', value: 'ShowStartupPanel', data: '0', type: REG_DWORD } 
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\GameBar', value: 'UseNexusForGameBarEnabled', data: '0', type: REG_DWORD} 
+  - !registryValue: { path: 'HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\Windows.Gaming.GameBar.PresenceServer.Internal.PresenceWriter', value: 'ActivationType', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\GameDVR', value: 'AllowGameDVR', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKLM\SOFTWARE\Microsoft\PolicyManager\default\ApplicationManagement\AllowGameDVR', value: 'value', data: '0', type: REG_DWORD }
+# Background Apps
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\BackgroundAccessApplications', value: 'GlobalUserDisabled', data: '1', type: REG_DWORD }
+  - !registryValue: { path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Search', value: 'BackgroundAppGlobalToggle', type: REG_DWORD, data: '0'}
+  - !registryValue: { path: 'HKLM\Software\Microsoft\Windows\CurrentVersion\Search', value: 'BackgroundAppGlobalToggle', type: REG_DWORD, data: '0'}
+# Extends the icon cache to 4MB for better explorer responsiveness
+  - !registryValue: { path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer', value: 'Max Cached Icons', data: '4096', type: REG_SZ }
+# Misc
+  - !registryValue: { path: 'HKCU\Software\Classes\Local Settings\Software\Microsoft\Windows\Shell\Bags\AllFolders\Shell', value: 'FolderType', data: 'NotSpecified', type: REG_SZ } # Disable Automatic Folder Discovery
+  - !registryValue: { path: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Multimedia\SystemProfile', value: 'SystemResponsiveness', data: '10', type: REG_DWORD } # Configures MMCSS for the best performance
+  - !registryValue: { path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\Task Scheduler\Maintenance', value: 'WakeUp', data: '0', type: REG_DWORD } # onfigure the 'Automatic Maintenance' feature in Windows, which does tasks such as updates when the computer is idle, for QoL and performance
+  - !registryValue: { path: 'HKLM\SYSTEM\CurrentControlSet\Control\PriorityControl', value: 'Win32PrioritySeparation', data: '38', type: REG_DWORD } # Prioritize Foreground Applications
+  - !registryValue: { path: 'HKCU\Control Panel\Desktop', value: 'AutoEndTasks', data: '1', type: REG_SZ } # Force Close Applications On Session End
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Serialize', value: 'StartupDelayInMSec', data: '0', type: REG_DWORD } # Disables the startup delay of startup applications
+  - !registryValue: {path: 'HKCU\Control Panel\Mouse', value: 'MouseHoverTime', type: REG_SZ, data: '30'} # Tooltip hover time (from 400ms to 30ms)
+  - !registryValue: {path: 'HKCU\Control Panel\Desktop', value: 'MenuShowDelay', type: REG_SZ, data: '0'} # Makes Start Menu pop up almost instantly
+  - !registryValue: {path: 'HKCU\Control Panel\Desktop', value: 'HungAppTimeout', type: REG_SZ, data: '2000'} # Shorter system wait for user processes to end
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Desktop', value: 'HungAppTimeout', type: REG_SZ, data: '2000'} # Shorter system wait for user processes to end
+  - !registryValue: {path: 'HKCU\Control Panel\Desktop', value: 'WaitToKillAppTimeout', type: REG_SZ, data: '2000'} # Shorter system wait for when system attempts sign-out, shutdown or restart
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Desktop', value: 'WaitToKillAppTimeout', type: REG_SZ, data: '2000'} # Shorter system wait for when system attempts sign-out, shutdown or restart
+  - !registryValue: {path: 'HKCU\Control Panel\Desktop', value: 'LowLevelHooksTimeout', type: REG_SZ, data: '1000'} # Faster Low-Level Hooks
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Desktop', value: 'LowLevelHooksTimeout', type: REG_SZ, data: '1000'} # Faster Low-Level Hooks
+  - !registryValue: {path: 'HKLM\SYSTEM\ControlSet001\Control', value: 'WaitToKillServiceTimeout', type: REG_SZ, data: '1500'} # Lowering time it takes for the OS to close/kill background Services on shutdown.
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Search', value: 'PreventIndexOnBattery', type: REG_DWORD, data: '1'} #Prevent indexing when running on battery power to conserve energy
+  - !registryValue: {path: 'HKLM\Software\Microsoft\Windows Search\Gather\Windows\SystemIndex', value: 'RespectPowerModes', type: REG_DWORD, data: '1'} #  Respect Power Settings when Indexing
+# Visual Effects
+  - !registryValue: {path: 'HKCU\Control Panel\Desktop', value: 'FontSmoothing', data: '2', type: REG_SZ}
+  - !registryValue: {path: 'HKCU\Control Panel\Desktop', value: 'UserPreferencesMask', data: '9012038010000000', type: REG_BINARY}
+  - !registryValue: {path: 'HKCU\Control Panel\Desktop', value: 'DragFullWindows', data: '1', type: REG_SZ}
+  - !registryValue: {path: 'HKCU\Control Panel\Desktop\WindowMetrics', value: 'MinAnimate', data: '0', type: REG_SZ}
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'ListviewAlphaSelect', data: '1', type: REG_DWORD}
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'IconsOnly', data: '0', type: REG_DWORD}
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'TaskbarAnimations', type: REG_DWORD, data: '0'} # Prevents pop-up from getting stuck
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'ListviewShadow', data: '1', type: REG_DWORD}
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\VisualEffects', value: 'VisualFXSetting', data: '3', type: REG_DWORD}
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\DWM', value: 'EnableAeroPeek', data: '0', type: REG_DWORD}
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\DWM', value: 'AlwaysHibernateThumbnails', data: '0', type: REG_DWORD}

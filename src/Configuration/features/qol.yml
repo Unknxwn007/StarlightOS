@@ -1,0 +1,187 @@
+title: Quality of Life features
+description: Starlight Quality of Life configuration
+actions:
+  - !writeStatus: {status: 'Running quality of life tweaks'}
+# Configures time servers to be more reliable and accurate than the defaults
+  - !service: {name: 'w32time', operation: start, ignoreErrors: true}
+  - !run: {exe: 'w32tm', args: '/config /syncfromflags:manual /manualpeerlist:"0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org"'}
+  - !run: {exe: 'w32tm', args: '/config /update'}
+  - !run: {exe: 'w32tm', args: '/resync'}
+# Starlight OEM Information
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation', value: 'Manufacturer', data: 'UNKNØWN', type: REG_SZ }
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation', value: 'Model', data: 'StarlightOS', type: REG_SZ }
+# Hide Disabled and Disconnected Devices in Sounds Panel
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Multimedia\Audio\DeviceCpl', value: 'ShowDisconnectedDevices', data: '0', type: REG_DWORD } 
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Multimedia\Audio\DeviceCpl', value: 'ShowHiddenDevices', data: '0', type: REG_DWORD }
+# Hide Insider page from Windows Updates 
+  - !registryValue: { path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer', value: 'SettingsPageVisibility', type: REG_SZ, data: ['hide:cortana', 'privacy-automaticfiledownloads', 'privacy-feedback', 'windowsinsider', 'home'] }
+# Explorer
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System', value: 'VerboseStatus', type: REG_DWORD, data: '1'} # Detailed Restart / Shutdown screen
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'HideFileExt', type: REG_DWORD, data: '0'} # Show file extensions
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'UseCompactMode', type: REG_DWORD, data: '1'} # Enabled compact view in explorer (Like Windows 10)
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'Hidden', type: REG_DWORD, data: '1'}  # Show hidden files
+  - !registryValue: {path: 'HKCU\Control Panel\Desktop', value: 'JPEGImportQuality', type: REG_DWORD, data: '100'} # Disable Wallpaper Compression
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer', value: 'link', type: REG_BINARY, data: '00000000'} # Disable '- Shortcut.' text on shortcut creation
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\OperationStatusManager', value: 'EnthusiastMode', type: REG_DWORD, data: '1'} # Detailed File Dialog (When moving or copying files)
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'LaunchTo', type: REG_DWORD, data: '1'} # Set 'Launch to' in explorer to 'This PC'
+  - !registryValue: {path: 'HKCU\SOFTWARE\Classes\CLSID\{e88865ea-0e1c-4e20-9aa6-edcd0212c87c}', value: 'System.IsPinnedToNameSpaceTree', data: '0', type: REG_DWORD } # Hide Gallery
+# Misc
+  - !registryValue: {path: 'HKCU\Control Panel\Keyboard', value: 'PrintScreenKeyForSnippingEnabled', type: REG_DWORD, data: '0'} # Printscreen key to open Snipping Tool
+  - !registryValue: {path: 'HKCU\Control Panel\Sound', value: 'Beep', type: REG_SZ, data: 'no'} # Disable system beep
+  - !registryValue: {path: 'HKCU\Software\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32', value: '', type: REG_SZ, data: '', option: "configure-lcm"}
+# Taskbar
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'ShowTaskViewButton', type: REG_DWORD, data: '0'}
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'ShowCortanaButton', type: REG_DWORD, data: '0'} 
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'ShowCopilotButton', type: REG_DWORD, data: '0'} 
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Chat', value: 'ChatIcon', data: '3', type: REG_DWORD}
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'TaskbarMn', data: '0', type: REG_DWORD}
+# Start Menu
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'Start_Layout', type: REG_DWORD, data: '1'} # Set Start Layout to 'More Pins'
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer', value: 'HideRecommendedPersonalizedSites', data: '1', type: REG_DWORD }
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'Start_IrisRecommendations', data: '0', type: REG_DWORD, builds: [ '>=22000' ] }
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'Start_AccountNotifications', data: '0', type: REG_DWORD }
+# Hide broken/unused pages in Settings
+  - !registryValue:
+    path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
+    value: 'SettingsPageVisibility'
+    data: 'hide:recovery;autoplay;usb;maps;maps-downloadmaps;findmydevice;privacy;notifications;privacy-notifications;privacy-feedback;privacy-activityhistory;search-permissions;privacy-location;privacy-general;sync;printers;cortana-windowssearch;mobile-devices;mobile-devices-addphone;workplace;family-group;deviceusage;home'
+    type: REG_SZ
+    builds: [ '>=22000' ]
+# Disable UAC Secure Desktop 
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System', value: 'PromptOnSecureDesktop', data: '0', type: REG_DWORD }
+# Disable 'Notify About USB Issues' (Prone to false positives)
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\Shell\USB', value: 'NotifyOnUsbErrors', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\Shell\USB', value: 'NotifyOnWeakCharger', data: '0', type: REG_DWORD }
+# Disable ValueBanners in Windows 11 Setting
+  - !registryValue: { path: 'HKLM\SOFTWARE\Microsoft\WindowsRuntime\ActivatableClassId\ValueBanner.IdealStateFeatureControlProvider', value: 'ActivationType', type: REG_DWORD, data: '0'}
+# Do not show feedback notifications
+  - !registryValue: { path: 'HKLM\Software\Policies\Microsoft\Windows\DataCollection', value: 'DoNotShowFeedbackNotifications', type: REG_DWORD, data: '1'} 
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\Siuf\Rules', value: 'PeriodInNanoSeconds', operation: delete }
+# Spotlight
+  - !registryValue: { path: 'HKCU\Software\Policies\Microsoft\Windows\CloudContent', value: 'DisableThirdPartySuggestions', type: REG_DWORD, data: '1'} 
+  - !registryValue: { path: 'HKCU\Software\Policies\Microsoft\Windows\CloudContent', value: 'DisableWindowsSpotlightWindowsWelcomeExperience', type: REG_DWORD, data: '1'} 
+  - !registryValue: { path: 'HKCU\Software\Policies\Microsoft\Windows\CloudContent', value: 'DisableWindowsSpotlightFeatures', type: REG_DWORD, data: '1'} 
+  - !registryValue: { path: 'HKCU\Software\Policies\Microsoft\Windows\CloudContent', value: 'DisableWindowsSpotlightOnActionCenter', type: REG_DWORD, data: '1'} 
+  - !registryValue: { path: 'HKCU\Software\Policies\Microsoft\Windows\CloudContent', value: 'DisableWindowsSpotlightOnSettings', type: REG_DWORD, data: '1'} 
+  - !registryValue: {path: 'HKCU\Software\Policies\Microsoft\Windows\CloudContent', value: 'ConfigureWindowsSpotlight', type: REG_DWORD, data: '2'}
+  - !registryValue: {path: 'HKCU\Software\Policies\Microsoft\Windows\CloudContent', value: 'IncludeEnterpriseSpotlight', type: REG_DWORD, data: '0'} 
+# Tips
+  - !registryValue: { path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer', value: 'AllowOnlineTips', type: REG_DWORD, data: '0'} 
+  - !registryValue: { path: 'HKLM\SOFTWARE\Microsoft\PolicyManager\default\Settings\AllowOnlineTips', value: 'value', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKLM\Software\Policies\Microsoft\Windows\CloudContent', value: 'DisableSoftLanding', type: REG_DWORD, data: '1'}
+# Disable Spell Checking
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\TabletTip\1.7', value: 'EnableAutocorrection', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\TabletTip\1.7', value: 'EnableDoubleTapSpace', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\TabletTip\1.7', value: 'EnablePredictionSpaceInsertion', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\TabletTip\1.7', value: 'EnableSpellchecking', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\TabletTip\1.7', value: 'EnableTextPrediction', data: '0', type: REG_DWORD }
+# Automatic MS Store Updates
+  - !registryValue: { path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsStore\WindowsUpdate', value: 'AutoDownload', data: '2', type: REG_DWORD, option: "configure-asu"} 
+# Touch Keyboard
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\TabletTip\1.7', value: 'EnableAutoShiftEngage', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\TabletTip\1.7', value: 'EnableKeyAudioFeedback', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKCU\Control Panel\Cursors', value: 'GestureVisualization', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKCU\Control Panel\Cursors', value: 'ContactVisualization', data: '0', type: REG_DWORD }
+# Ink workspace
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\PenWorkspace', value: 'PenWorkspaceAppSuggestionsEnabled', data: '0', type: REG_DWORD }
+# Windows Update
+  - !registryValue: { path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\DeliveryOptimization', value: 'DODownloadMode', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate', value: 'ManagePreviewBuilds', data: '1', type: REG_DWORD}
+  - !registryValue: { path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate', value: 'ManagePreviewBuildsPolicyValue', data: '0', type: REG_DWORD}
+  - !registryValue: { path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds', value: 'AllowBuildPreview', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds', value: 'EnableConfigFlighting', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\PreviewBuilds', value: 'EnableExperimentation', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKLM\SOFTWARE\Microsoft\WindowsSelfHost\UI\Visibility', value: 'HideInsiderPage', data: '1', type: REG_DWORD }
+  - !registryValue: { path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\WindowsUpdate\AU', value: 'NoAUAsDefaultShutdownOption', data: '1', type: REG_DWORD} # Nagging
+  - !registryValue: { path: 'HKLM\SOFTWARE\Microsoft\WindowsUpdate\UX\Settings', value: 'HideMCTLink', data: '1', type: REG_DWORD}
+# Turn off cloud optimized content
+  - !registryValue: { path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent', value: 'DisableCloudOptimizedContent', type: REG_DWORD, data: '1'} 
+# Never Use Tablet Mode
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ImmersiveShell', value: 'SignInMode', data: '1', type: REG_DWORD }
+# Crash Control
+  - !registryValue: { path: 'HKLM\SYSTEM\CurrentControlSet\Control\CrashControl', value: 'AutoReboot', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKLM\SYSTEM\CurrentControlSet\Control\CrashControl', value: 'CrashDumpEnabled', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKLM\SYSTEM\CurrentControlSet\Control\CrashControl', value: 'LogEvent', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKLM\SYSTEM\CurrentControlSet\Control\CrashControl', value: 'DisplayParameters', data: '1', type: REG_DWORD }
+  - !registryValue: { path: 'HKLM\SYSTEM\CurrentControlSet\Control\CrashControl\StorageTelemetry', value: 'DeviceDumpEnabled', data: '0', type: REG_DWORD }
+# Disable Shared Experiences
+  - !registryValue: { path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\CDP\SettingsPage', value: 'BluetoothLastDisabledNearShare', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\CDP', value: 'NearShareChannelUserAuthzPolicy', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\CDP', value: 'CdpSessionUserAuthzPolicy', data: '1', type: REG_DWORD }
+# Disable Network Location Wizard
+  - !registryKey: { path: 'HKLM\SYSTEM\CurrentControlSet\Control\Network\NewNetworkWindowOff', operation: add }
+# Disable Searching for Invalid Shortcuts
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer', value: 'NoResolveSearch', data: '1', type: REG_DWORD }
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer', value: 'NoResolveTrack', data: '1', type: REG_DWORD }
+# Disable Sharing Wizard
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'SharingWizardOn', data: '0', type: REG_DWORD }
+# Disable 'Always Read and Scan This Section'
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\Ease of Access', value: 'selfscan', data: '0', type: REG_DWORD }
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\Ease of Access', value: 'selfvoice', data: '0', type: REG_DWORD }
+# Disable Commonly Annoying Features and Shortcuts
+  - !registryKey: {path: 'HKCU\Control Panel\Accessibility\AudioDescription'}
+  - !registryKey: {path: 'HKCU\Control Panel\Accessibility\Blind Access'}
+  - !registryKey: {path: 'HKCU\Control Panel\Accessibility\HighContrast'}
+  - !registryKey: {path: 'HKCU\Control Panel\Accessibility\Keyboard Preference'}
+  - !registryKey: {path: 'HKCU\Control Panel\Accessibility\Keyboard Response'}
+  - !registryKey: {path: 'HKCU\Control Panel\Accessibility\MouseKeys'}
+  - !registryKey: {path: 'HKCU\Control Panel\Accessibility\On'}
+  - !registryKey: {path: 'HKCU\Control Panel\Accessibility\ShowSounds'}
+  - !registryKey: {path: 'HKCU\Control Panel\Accessibility\SlateLaunch'}
+  - !registryKey: {path: 'HKCU\Control Panel\Accessibility\SoundSentry'}
+  - !registryKey: {path: 'HKCU\Control Panel\Accessibility\StickyKeys'}
+  - !registryKey: {path: 'HKCU\Control Panel\Accessibility\TimeOut'}
+  - !registryKey: {path: 'HKCU\Control Panel\Accessibility\ToggleKeys'}
+  - !registryKey: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\AudioDescription'}
+  - !registryKey: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\Blind Access'}
+  - !registryKey: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\HighContrast'}
+  - !registryKey: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\Keyboard Preference'}
+  - !registryKey: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\Keyboard Response'}
+  - !registryKey: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\MouseKeys'}
+  - !registryKey: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\On'}
+  - !registryKey: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\ShowSounds'}
+  - !registryKey: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\SlateLaunch'}
+  - !registryKey: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\SoundSentry'}
+  - !registryKey: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\StickyKeys'}
+  - !registryKey: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\TimeOut'}
+  - !registryKey: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\ToggleKeys'}
+  - !registryValue: {path: 'HKCU\Control Panel\Accessibility\AudioDescription', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKCU\Control Panel\Accessibility\Blind Access', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKCU\Control Panel\Accessibility\HighContrast', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKCU\Control Panel\Accessibility\Keyboard Preference', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKCU\Control Panel\Accessibility\Keyboard Response', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKCU\Control Panel\Accessibility\MouseKeys', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKCU\Control Panel\Accessibility\On', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKCU\Control Panel\Accessibility\ShowSounds', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKCU\Control Panel\Accessibility\SlateLaunch', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKCU\Control Panel\Accessibility\SoundSentry', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKCU\Control Panel\Accessibility\StickyKeys', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKCU\Control Panel\Accessibility\TimeOut', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKCU\Control Panel\Accessibility\ToggleKeys', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\AudioDescription', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\Blind Access', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\HighContrast', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\Keyboard Preference', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\Keyboard Response', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\MouseKeys', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\On', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\ShowSounds', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\SlateLaunch', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\SoundSentry', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\StickyKeys', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\TimeOut', value: 'Flags', type: REG_SZ, data: '0'}
+  - !registryValue: {path: 'HKU\.DEFAULT\Control Panel\Accessibility\ToggleKeys', value: 'Flags', type: REG_SZ, data: '0'}
+# Disable Accessibility Tool Shortcut
+  - !registryValue: { path: 'HKCU\Control Panel\Accessibility\SlateLaunch', value: 'LaunchAT', data: '0', type: REG_DWORD }
+# Windows Features
+  - !writeStatus: {status: 'Enabling DirectPlay'}
+  - !run: {exe: 'DISM.exe', args: '/Online /Enable-Feature /FeatureName:"DirectPlay" /NoRestart /All', weight: 30}
+  - !writeStatus: {status: 'Disabling Internet Explorer', builds: [ '<22000' ]}
+  - !run: {exe: 'DISM.exe', args: '/Online /Disable-Feature /FeatureName:"Internet-Explorer-Optional-amd64" /NoRestart', weight: 30, builds: [ '<22000' ]}
+  - !writeStatus: {status: 'Disabling Maths Recognizer', builds: [ '<22000' ]}
+  - !run: {exe: 'DISM.exe', args: '/Online /Remove-Capability /CapabilityName:"MathRecognizer~~~~0.0.1.0" /NoRestart', weight: 30, builds: [ '<22000' ]}
+  - !writeStatus: {status: 'Disabling Steps Recorder'}
+  - !run: {exe: 'DISM.exe', args: '/Online /Remove-Capability /CapabilityName:"App.StepsRecorder~~~~0.0.1.0" /NoRestart', weight: 30}
+  - !writeStatus: {status: 'Disabling Legacy Media Player'}
+  - !run: {exe: 'DISM.exe', args: '/Online /Disable-Feature /FeatureName:"WindowsMediaPlayer" /NoRestart', weight: 30}
+  - !run: {exe: 'DISM.exe', args: '/Online /Remove-Capability /CapabilityName:"Media.WindowsMediaPlayer~~~~0.0.12.0" /NoRestart', weight: 30}

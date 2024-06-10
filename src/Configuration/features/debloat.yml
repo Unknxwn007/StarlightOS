@@ -1,0 +1,60 @@
+title: Debloat Install
+description: Starlight debloat configuration
+actions:
+  - !writeStatus: {status: 'Debloating install'}
+# Turn off Content Delivery
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'ContentDeliveryAllowed', type: REG_DWORD, data: '0'} 
+# Prevent Content Delivery Manager from reverting feature configuration
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'FeatureManagementEnabled', type: REG_DWORD, data: '0'} 
+# Turn off Subscribed Content
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContentEnabled', type: REG_DWORD, data: '0'} 
+# Turn Off Pre-installed vendor apps
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'OemPreInstalledAppsEnabled', type: REG_DWORD, data: '0'}
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'OemPreInstalledAppsEnabled', type: REG_DWORD, data: '0'}
+# Turn off Automatically Install Suggested and Pre-installed Apps
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SilentInstalledAppsEnabled', type: REG_DWORD, data: '0'} 
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'PreInstalledAppsEverEnabled', type: REG_DWORD, data: '0'} 
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'PreInstalledAppsEnabled', type: REG_DWORD, data: '0'}
+# Don't Show me notifications in the Settings app
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\SystemSettings\AccountNotifications', value: 'EnableAccountNotifications', type: REG_DWORD, data: '1', weight: 50}  
+# Suggested content in the Settings app
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-338393Enabled', data: '0', type: REG_DWORD } 
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-353694Enabled', data: '0', type: REG_DWORD }
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-353696Enabled', data: '0', type: REG_DWORD }
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SystemPaneSuggestionsEnabled', data: '0', type: REG_DWORD }
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-338387Enabled', data: '0', type: REG_DWORD }
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager',value: 'RotatingLockScreenOverlayEnabled', data: '0', type: REG_DWORD }
+# Don't Show suggestions occasionally in Start 
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-338388Enabled', type: REG_DWORD, data: '0'} 
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SoftLandingEnabled', type: REG_DWORD, data: '0'} 
+# Disable Get tips, tricks and suggestions as you use Windows
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-338389Enabled', type: REG_DWORD, data: '0'}
+# Enable Storage Sense
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '01', type: REG_DWORD, data: '1'}
+# Run Storage Sense
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '1024', type: REG_DWORD, data: '1'}
+# Run Storage Sense every month
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '2048', type: REG_DWORD, data: '30'}
+# Enable cleaning temporary files
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '04', type: REG_DWORD, data: '1'}
+# Disable the 'Downloads' from being cleared
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '32', type: REG_DWORD, data: '0'}
+# Disable OneDrive cleanup
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '02', type: REG_DWORD, data: '0'}
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '128', type: REG_DWORD, data: '0'}
+# Clean Recycle Bin every month
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '08', type: REG_DWORD, data: '1'}
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '256', type: REG_DWORD, data: '30'}
+# Enable cleaning temp files
+  - !scheduledTask: {path: '\Microsoft\Windows\DiskCleanup\SilentCleanup', operation: enable}
+# Disables reserved storage for Windows Updates to have more storage space
+  - !run: {exe: 'DISM.exe', args: '/Online /Set-ReservedStorageState /State:Disabled', weight: 30}
+# Disable Scheduled Tasks
+  - !scheduledTask: {path: '\Microsoft\Windows\Diagnosis\Scheduled', operation: disable}
+  - !scheduledTask: {path: '\Microsoft\Windows\Application Experience\PcaPatchDbTask', operation: disable}
+# Hide Unused Windows Security Pages
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Family options', value: 'UILockdown', data: '1', type: REG_DWORD } 
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Device performance and health', value: 'UILockdown', data: '1', type: REG_DWORD } 
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows Defender Security Center\Account protection', value: 'UILockdown', data: '1', type: REG_DWORD} 
+# Disable Windows Platform Binary Table Execution (WPBT)
+  - !registryValue: { path: 'HKLM\SYSTEM\CurrentControlSet\Control\Session Manager', value: 'DisableWpbtExecution', data: '1', type: REG_DWORD }

@@ -1,0 +1,15 @@
+title: Starlight Network
+description: Starlight Network Configuration
+actions:
+  - !writeStatus: {status: 'Running network tweaks'}
+# Disable Link-Local Multicast Name Resolution (LLMNR) protocol as it is vulnerable and has been replaced by DNS
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows NT\DNSClient', value: 'EnableMulticast', data: '0', type: REG_DWORD }
+# Restrict Anonymous Enumeration of Shares
+  - !registryValue: {path: 'HKLM\SYSTEM\CurrentControlSet\Control\Lsa', value: 'RestrictAnonymous', data: '1', type: REG_DWORD} 
+# Restricts anonymous access to named pipes and shares to prevent unauthorized system access
+  - !registryValue: {path: 'HKLM\SYSTEM\CurrentControlSet\Services\LanManServer\Parameters', value: 'RestrictNullSessAccess', data: '1', type: REG_DWORD} 
+# Disable SMB Bandwidth Throttling
+  - !registryValue: { path: 'HKLM\SYSTEM\CurrentControlSet\Services\LanmanWorkstation\Parameters', value: 'DisableBandwidthThrottling', data: '1', type: REG_DWORD}
+# Set Network Location to 'Home'
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OOBE', value: 'NetworkLocation', type: REG_SZ, data: 'Home'} 
+  - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\OOBE', value: 'NetworkLocation', type: REG_SZ, data: 'Home'}

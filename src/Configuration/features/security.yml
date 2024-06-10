@@ -1,0 +1,15 @@
+title: Security Enhancement
+description: Starlight security configuration
+actions:
+  - !writeStatus: {status: 'Running security tweaks'}
+# Disable Wi-Fi Sense
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\WcmSvc\wifinetworkmanager\config', value: 'AutoConnectAllowedOEM', type: REG_DWORD, data: '0'}
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\PolicyManager\default\WiFi\AllowAutoConnectToWiFiSenseHotspots', value: 'value', type: REG_DWORD, data: '0'}
+# Blocks Anonymous Enumeration of SAM Accounts
+  - !registryValue: {path: 'HKLM\SYSTEM\CurrentControlSet\Control\Lsa', value: 'RestrictAnonymousSAM', data: '1', type: REG_DWORD }
+  # Delete 'defaultuser0' Account Used During OOBE
+  - !cmd: {command: 'net user defaultuser0 /delete & exit 0'}
+# Disable Remote Assistance
+  - !registryValue: {path: 'HKLM\SYSTEM\CurrentControlSet\Control\Remote Assistance', value: 'fAllowFullControl', data: '0', type: REG_DWORD }
+  - !registryValue: {path: 'HKLM\SYSTEM\CurrentControlSet\Control\Remote Assistance', value: 'fAllowToGetHelp', data: '0', type: REG_DWORD }
+  - !run: {exe: 'netsh', args: 'advfirewall firewall set rule group="Remote Assistance" new enable=no'}
