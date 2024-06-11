@@ -16,7 +16,7 @@ Starlight is designed to be lightweight, stable, and focused on improving perfor
 - 🎯 Easy to use, just drag and drop the playbook into [AME Wizard](https://ameliorated.io)
 - 🗑 Removes bloatware and unnecessary system components
 - ⚡ Optimizes your system for performance and improved privacy
-<!--- 🔧 Integrates the [Starlight Tool](https://github.com/unknxwn007/starlight-tool) to customize your system further -->
+- 🔧 Integrates the [Starlight Tool](https://github.com/unknxwn007/starlight-tool)
 
 ## 🚀 Getting Started
 
@@ -33,4 +33,4 @@ Ready to elevate your Windows experience? Follow these simple steps:
 Since Starlight doesn't redistribute a modified Windows ISO, it complies with Windows's Usage Terms. In addition, Starlight does not alter activation in Windows.
 
 ## 📕 Credits
-- ReviOS & Ameliorated Documentation
+- ReviOS, AtlasOS & Ameliorated Documentation
