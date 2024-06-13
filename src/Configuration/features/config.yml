@@ -46,6 +46,13 @@ actions:
     args: '-NoP -ExecutionPolicy Bypass -File DismFeatures.ps1'
     weight: 270
 
+  - !writeStatus: {status: "Setting Wallpaper"}
+  - !run:
+    exeDir: true
+    exe: "PowerShell"
+    args: '-NoP -ExecutionPolicy Bypass -File WALLPAPER.PS1'
+    weight: 50
+
     # Necessary to refresh start menu entries etc.
   - !appx: {operation: clearCache, name: '*Client.CBS*'}
   - !appx: {operation: clearCache, name: '*StartMenuExperienceHost*'}

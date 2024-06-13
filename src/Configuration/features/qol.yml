@@ -56,12 +56,7 @@ actions:
   - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\Explorer', value: 'HideRecommendedPersonalizedSites', data: '1', type: REG_DWORD }
   - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'Start_IrisRecommendations', type: REG_DWORD, data: '0'} # Hide recommendations for tips, shortcuts, new apps, and more  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'Start_AccountNotifications', data: '0', type: REG_DWORD } # # Hide account related notifications occasionally in Start
 # Hide broken/unused pages in Settings
-  - !registryValue:
-    path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer'
-    value: 'SettingsPageVisibility'
-    data: 'hide:recovery;autoplay;usb;maps;maps-downloadmaps;findmydevice;privacy;notifications;privacy-notifications;privacy-feedback;privacy-activityhistory;search-permissions;privacy-location;privacy-general;sync;printers;cortana-windowssearch;mobile-devices;mobile-devices-addphone;workplace;family-group;deviceusage;home'
-    type: REG_SZ
-    builds: [ '>=22000' ]
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\Explorer', value: 'SettingsPageVisibility', data: 'hide:recovery;autoplay;usb;maps;maps-downloadmaps;findmydevice;privacy;notifications;privacy-notifications;privacy-feedback;privacy-activityhistory;search-permissions;privacy-location;privacy-general;sync;printers;cortana-windowssearch;mobile-devices;mobile-devices-addphone;workplace;family-group;deviceusage;home', type: REG_SZ }
 # Disable UAC Secure Desktop 
   - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System', value: 'PromptOnSecureDesktop', data: '0', type: REG_DWORD }
 # Disable 'Notify About USB Issues' (Prone to false positives)
