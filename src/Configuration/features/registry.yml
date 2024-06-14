@@ -16,9 +16,10 @@ actions:
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize', value: 'SystemUsesLightTheme', type: REG_DWORD, data: '1', option: "!configure-darkmode", weight: 50}
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize', value: 'AppsUseLightTheme', type: REG_DWORD, data: '0', option: "configure-darkmode", weight: 70}
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize', value: 'SystemUsesLightTheme', type: REG_DWORD, data: '0', option: "configure-darkmode", weight: 50}
-# Prevent Windows Update Orchestrator automatically instaling unwanted updates FOR DevHome & Outlook
+# Prevent Windows Update Orchestrator automatically instaling unwanted updates FOR DevHome, Edge & Outlook
   - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\WindowsUpdate\Orchestrator\UScheduler_Oobe\DevHomeUpdate', operation: 'delete'} 
   - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\WindowsUpdate\Orchestrator\UScheduler_Oobe\OutlookUpdate', operation: 'delete'}
+  # - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\WindowsUpdate\Orchestrator\UScheduler_Oobe\EdgeUpdate', operation: 'delete'}
   - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Orchestrator\UScheduler\DevHomeUpdate', value: 'workCompleted', type: REG_DWORD, data: '1'}
 # Paging
   - !registryValue: {path: 'HKLM\SYSTEM\CurrentControlSet\Control\Session Manager\Memory Management', value: 'DisablePagingExecutive', data: '1', type: REG_DWORD} # Disable Paging Settings

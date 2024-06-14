@@ -47,11 +47,24 @@ actions:
     weight: 270
 
   - !writeStatus: {status: "Setting Wallpaper"}
-  - !run:
+  - !cmd:
     exeDir: true
-    exe: "PowerShell"
-    args: '-NoP -ExecutionPolicy Bypass -File WALLPAPER.PS1'
-    weight: 50
+    command: 'robocopy "Wallpapers" "%systemroot%\Web\Wallpaper\Starlight" /E /PURGE /IM /IT /NP'
+    ignoreErrors: true
+
+  - !powerShell:
+    command: '.\WALLPAPER.ps1 -Mode Desktop -ImagePath $env:systemroot\Web\Wallpaper\Starlight\desktop.png'
+    exeDir: true
+    runas: currentUserElevated
+    option: "configure-wallpaper"
+    weight: 45
+
+  - !powerShell: 
+    command: '.\WALLPAPER.ps1 -Mode LockScreen -ImagePath $env:systemroot\Web\Wallpaper\Starlight\lockscreen.heic'
+    exeDir: true
+    runas: currentUserElevated
+    option: "configure-wallpaper"
+    weight: 45 
 
     # Necessary to refresh start menu entries etc.
   - !appx: {operation: clearCache, name: '*Client.CBS*'}

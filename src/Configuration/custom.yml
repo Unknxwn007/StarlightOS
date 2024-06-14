@@ -2,13 +2,7 @@ title: Custom
 description: Custom Starlight configuration
 privilege: Admin
 actions: 
-# Prevent annoying notifications during deployment
   - !taskKill: {name: 'explorer'}
-  - !cmd:
-    command: '"Disable Notifications.cmd" /includeuserservice'
-    exeDir: true
-    wait: true
-    runas: currentUserElevated
   - !run: {exe: 'explorer.exe', runas: 'currentUser', wait: false}
 tasks:
   - features\debloat.yml

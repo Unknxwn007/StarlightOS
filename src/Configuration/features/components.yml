@@ -32,3 +32,4 @@ actions:
   - !run: {exeDir: true, exe: "onedrive.cmd", option: "remove-onedrive", weight: 40}
   - !file: {path: "%SystemDrive%\\OneDriveTemp", option: "remove-onedrive"}
   - !file: {path: "%ProgramData%\\Microsoft OneDrive", option: "remove-onedrive"}
+  - !registryValue: {path: 'HKCR\CLSID\{018D5C66-4533-4307-9B53-224DE2ED1FE6}', value: 'Disabled', type: REG_DWORD, data: '1'} # Prevent re-install

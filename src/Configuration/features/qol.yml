@@ -39,6 +39,7 @@ actions:
   - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SPP\Clients'} # Disable System Restore pre-defined Config
   - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore', value: 'RPSessionInterval', type: REG_DWORD, data: '0'}
   - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\SystemRestore\cfg', value: 'DiskPercent', type: REG_DWORD, data: '0'}
+  # - !registryValue: {path: 'HKCU:\Control Panel\Bluetooth', value: 'Notification Area Icon', type: REG_DWORD, data: '0', operation: 'add'} # Hide Bluetooth Icon from taskbar
 # Taskbar
   - !registryValue: {path: 'HKLM\SOFTWARE\Policies\Microsoft\Windows\Windows Feeds', value: 'EnableFeeds', type: REG_DWORD, data: '0'} # Disable news and interests on the taskbar
   - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced', value: 'ShowTaskViewButton', type: REG_DWORD, data: '0'}
