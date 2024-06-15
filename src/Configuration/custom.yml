@@ -5,6 +5,7 @@ actions:
   - !taskKill: {name: 'explorer'}
   - !run: {exe: 'explorer.exe', runas: 'currentUser', wait: false}
 tasks:
+  - features\start.yml
   - features\debloat.yml
   - features\qol.yml
   - features\network.yml
@@ -16,4 +17,3 @@ tasks:
   - features\config.yml
   - features\registry.yml
   - features\services.yml
-  - features\software.yml

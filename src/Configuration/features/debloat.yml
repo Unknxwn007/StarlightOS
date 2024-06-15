@@ -1,49 +1,75 @@
 title: Debloat Install
 description: Starlight debloat configuration
 actions:
-  - !writeStatus: {status: 'Debloating install'}
+  - !writeStatus: {status: 'Debloating Windows'}
+# Prevent Re-Install of some UWP apps
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned', operation: add} # Cortana
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.549981C3F5F10_8wekyb3d8bbwe', operation: add} # Microsoft.Bing
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.BingNews_8wekyb3d8bbwe', operation: add}
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.ECApp_8wekyb3d8bbwe', operation: add} # Get-Help & Get-Started
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.GetHelp_8wekyb3d8bbwe', operation: add}
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.MicrosoftSolitaireCollection_8wekyb3d8bbwe', operation: add} # Solitaire
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.MicrosoftStickyNotes_8wekyb3d8bbwe', operation: add} # Sticky Notes
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.People_8wekyb3d8bbwe', operation: add} # People
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.PowerAutomateDesktop_8wekyb3d8bbwe', operation: add} # Power Automate Desktop
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.Todos_8wekyb3d8bbwe', operation: add} # Microsoft Todo's
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.Windows.SecureAssessmentBrowser_cw5n1h2txyewy', operation: add} # Take a Test
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.WindowsAlarms_8wekyb3d8bbwe', operation: add} # Alarms
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.WindowsCamera_8wekyb3d8bbwe', operation: add} # Camera
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.WindowsFeedbackHub_8wekyb3d8bbwe', operation: add} # FeedbackHub
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.WindowsMaps_8wekyb3d8bbwe', operation: add} # Maps
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.WindowsSoundRecorder_8wekyb3d8bbwe', operation: add} # Windows Sound Recorder
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.ZuneMusic_8wekyb3d8bbwe', operation: add} # Music
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\microsoft.windowscommunicationsapps_8wekyb3d8bbwe', operation: add} # Mail
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.Advertising.Xaml_8wekyb3d8bbwe', operation: add} # Advertising.Xaml
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.Microsoft3DViewer_8wekyb3d8bbwe', operation: add} # 3DViewer
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.MixedReality.Portal_8wekyb3d8bbwe', operation: add} # Mixed Reality Portal
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\clipchamp.clipchamp_yxz26nhyzhsrt', operation: add} # Clipchamp
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\MicrosoftCorporationII.QuickAssist_8wekyb3d8bbwe', operation: add} # QuickAssist
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\MicrosoftCorporationII.MicrosoftFamily_8wekyb3d8bbwe', operation: add} # Family
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.Whiteboard_8wekyb3d8bbwe', operation: add} # Whiteboard
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\microsoft.microsoftskydrive_8wekyb3d8bbwe', operation: add} # SkyDrive
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\MicrosoftCorporationII.MailforSurfaceHub_8wekyb3d8bbwe', operation: add} # Mail for SurfaceHub
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.MicrosoftPowerBIForWindows_8wekyb3d8bbwe', operation: add} # PowerBI
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.MicrosoftTeamsforSurfaceHub_8wekyb3d8bbwe', operation: add} # Teams for SurfaceHub
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.SkypeApp_kzf8qxf38zg5c', operation: add} # Skype
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.MicrosoftOfficeHub_8wekyb3d8bbwe', operation: add} # Office
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.Office.OneNote_8wekyb3d8bbwe', operation: add} # OneNote
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.Office.Excel_8wekyb3d8bbwe', operation: add} # Excel
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.Office.PowerPoint_8wekyb3d8bbwe', operation: add} # PowerPoint
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.Office.Word_8wekyb3d8bbwe', operation: add} # Word
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.Windows.DevHome_8wekyb3d8bbwe', operation: add} # Dev Home
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\Microsoft.OutlookForWindows_8wekyb3d8bbwe', operation: add} # Outlook for Windows
+  - !registryKey: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\Appx\AppxAllUserStore\Deprovisioned\MSTeams_8wekyb3d8bbwe', operation: add} # Teams
 # Turn off Content Delivery
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'ContentDeliveryAllowed', type: REG_DWORD, data: '0'} 
-# Prevent Content Delivery Manager from reverting feature configuration
-  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'FeatureManagementEnabled', type: REG_DWORD, data: '0'} 
-# Turn off Subscribed Content
-  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContentEnabled', type: REG_DWORD, data: '0'} 
-# Turn Off Pre-installed vendor apps
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'FeatureManagementEnabled', type: REG_DWORD, data: '0'} # Prevent Content Delivery Manager from reverting feature configuration
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContentEnabled', type: REG_DWORD, data: '0'} # Turn off Subscribed Content
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'OemPreInstalledAppsEnabled', type: REG_DWORD, data: '0'} # Turn Off Pre-installed vendor apps
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'OemPreInstalledAppsEnabled', type: REG_DWORD, data: '0'}
-  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'OemPreInstalledAppsEnabled', type: REG_DWORD, data: '0'}
-# Turn off Automatically Install Suggested and Pre-installed Apps
-  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SilentInstalledAppsEnabled', type: REG_DWORD, data: '0'} 
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SilentInstalledAppsEnabled', type: REG_DWORD, data: '0'} # Turn off Automatically Install Suggested and Pre-installed Apps
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'PreInstalledAppsEverEnabled', type: REG_DWORD, data: '0'} 
-  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'PreInstalledAppsEnabled', type: REG_DWORD, data: '0'}
-# Don't Show me notifications in the Settings app
-  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\SystemSettings\AccountNotifications', value: 'EnableAccountNotifications', type: REG_DWORD, data: '1', weight: 50}  
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'PreInstalledAppsEnabled', type: REG_DWORD, data: '0'} 
 # Suggested content in the Settings app
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-310093Enabled', data: '0', type: REG_DWORD } 
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-338387Enabled', data: '0', type: REG_DWORD }
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-338388Enabled', data: '0', type: REG_DWORD } # Don't Show suggestions occasionally in Start 
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-338389Enabled', type: REG_DWORD, data: '0'} # Disable Get tips, tricks and suggestions as you use Windows
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-338393Enabled', data: '0', type: REG_DWORD } 
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-353694Enabled', data: '0', type: REG_DWORD }
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-353696Enabled', data: '0', type: REG_DWORD }
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SystemPaneSuggestionsEnabled', data: '0', type: REG_DWORD }
-  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-338387Enabled', data: '0', type: REG_DWORD }
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager',value: 'RotatingLockScreenOverlayEnabled', data: '0', type: REG_DWORD }
-# Don't Show suggestions occasionally in Start 
-  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-338388Enabled', type: REG_DWORD, data: '0'} 
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SoftLandingEnabled', type: REG_DWORD, data: '0'} 
-# Disable Get tips, tricks and suggestions as you use Windows
-  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\ContentDeliveryManager', value: 'SubscribedContent-338389Enabled', type: REG_DWORD, data: '0'}
-# Enable Storage Sense
+# Enable, run and configure Storage Sense
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '01', type: REG_DWORD, data: '1'}
-# Run Storage Sense
-  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '1024', type: REG_DWORD, data: '1'}
-# Run Storage Sense every month
-  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '2048', type: REG_DWORD, data: '30'}
-# Enable cleaning temporary files
-  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '04', type: REG_DWORD, data: '1'}
-# Disable the 'Downloads' from being cleared
-  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '32', type: REG_DWORD, data: '0'}
-# Disable OneDrive cleanup
-  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '02', type: REG_DWORD, data: '0'}
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '1024', type: REG_DWORD, data: '1'} # Run Storage Sense
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '2048', type: REG_DWORD, data: '30'} # Run Storage Sense every month
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '04', type: REG_DWORD, data: '1'} # Enable cleaning temporary files
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '32', type: REG_DWORD, data: '0'} # Disable the 'Downloads' from being cleared
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '02', type: REG_DWORD, data: '0'} # Disable OneDrive cleanup
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '128', type: REG_DWORD, data: '0'}
-# Clean Recycle Bin every month
-  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '08', type: REG_DWORD, data: '1'}
+  - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '08', type: REG_DWORD, data: '1'} # Clean Recycle Bin every month
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\StorageSense\Parameters\StoragePolicy', value: '256', type: REG_DWORD, data: '30'}
 # Enable cleaning temp files
   - !scheduledTask: {path: '\Microsoft\Windows\DiskCleanup\SilentCleanup', operation: enable}

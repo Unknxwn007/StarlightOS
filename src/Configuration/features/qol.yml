@@ -1,15 +1,13 @@
 title: Quality of Life features
 description: Starlight Quality of Life configuration
 actions:
-  - !writeStatus: {status: 'Running quality of life tweaks'}
-# Configures time servers to be more reliable and accurate than the defaults
-  - !service: {name: 'w32time', operation: start, ignoreErrors: true}
-  - !run: {exe: 'w32tm', args: '/config /syncfromflags:manual /manualpeerlist:"0.pool.ntp.org 1.pool.ntp.org 2.pool.ntp.org 3.pool.ntp.org"'}
-  - !run: {exe: 'w32tm', args: '/config /update'}
-  - !run: {exe: 'w32tm', args: '/resync'}
+  - !writeStatus: {status: 'Improving the Windows experience'}
+# Disable annoying Windows Defender notifications
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows Defender Security Center\Notifications', value: 'DisableEnhancedNotifications', data: '1', type: REG_DWORD }
+# Don't Show me notifications in the Settings app 
+  - !registryValue: {path: 'HKCU\Software\Microsoft\Windows\CurrentVersion\SystemSettings\AccountNotifications', value: 'EnableAccountNotifications', type: REG_DWORD, data: '1', weight: 50}
 # Starlight OEM Information
-  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation', value: 'Manufacturer', data: 'UNKNØWN', type: REG_SZ }
-  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation', value: 'Model', data: 'StarlightOS', type: REG_SZ }
+  - !registryValue: {path: 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion', value: 'EditionSubVersion', type: REG_SZ, data: 'StarlightOS'}
 # Hide Disabled and Disconnected Devices in Sounds Panel
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Multimedia\Audio\DeviceCpl', value: 'ShowDisconnectedDevices', data: '0', type: REG_DWORD } 
   - !registryValue: {path: 'HKCU\SOFTWARE\Microsoft\Multimedia\Audio\DeviceCpl', value: 'ShowHiddenDevices', data: '0', type: REG_DWORD }

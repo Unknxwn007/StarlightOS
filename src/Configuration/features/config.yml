@@ -6,14 +6,6 @@ actions:
   # Disable Memory Compression
   - !powerShell: 
     command: 'Disable-MMAgent -mc'
-  
-  - !cmd:
-    command: 'setx DOTNET_CLI_TELEMETRY_OPTOUT 1'
-    runas: currentUserElevated
-    
-  - !cmd:
-    command: 'setx POWERSHELL_TELEMETRY_OPTOUT 1'
-    runas: currentUserElevated
 
   - !writeStatus: {status: "Removing logs"}
   - !run:
@@ -56,14 +48,12 @@ actions:
     command: '.\WALLPAPER.ps1 -Mode Desktop -ImagePath $env:systemroot\Web\Wallpaper\Starlight\desktop.png'
     exeDir: true
     runas: currentUserElevated
-    option: "configure-wallpaper"
     weight: 45
 
   - !powerShell: 
-    command: '.\WALLPAPER.ps1 -Mode LockScreen -ImagePath $env:systemroot\Web\Wallpaper\Starlight\lockscreen.heic'
+    command: '.\WALLPAPER.ps1 -Mode LockScreen -ImagePath $env:systemroot\Web\Wallpaper\Starlight\lockscreen.png'
     exeDir: true
     runas: currentUserElevated
-    option: "configure-wallpaper"
     weight: 45 
 
     # Necessary to refresh start menu entries etc.

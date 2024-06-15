@@ -16,7 +16,7 @@ Starlight is designed to be lightweight, stable, and focused on improving perfor
 - 🎯 Easy to use, just drag and drop the playbook into [AME Wizard](https://ameliorated.io)
 - 🗑 Removes bloatware and unnecessary system components
 - ⚡ Optimizes your system for performance and improved privacy
-- 🔧 Integrates the [Starlight Tool](https://github.com/unknxwn007/starlight-tool)
+<!-- - 🔧 Integrates the [Starlight Tool](https://github.com/unknxwn007/starlight-tool) -->
 
 ## 🚀 Getting Started
 

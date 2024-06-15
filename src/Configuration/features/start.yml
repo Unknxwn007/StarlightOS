@@ -1,0 +1,38 @@
+title: Script Startup
+description: Copies Starlight folders/files, and configures some initial settings
+privilege: TrustedInstaller
+actions:
+  - !writeStatus: {status: "Initializing"}
+# Prevent notifications during deployment
+  - !registryValue: { path: 'HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Notifications\Settings\Windows.SystemToast.SecurityAndMaintenance', value: 'Enabled', type: REG_DWORD, data: '0' }
+# Copy hosts file
+  - !cmd: { exeDir: true, command: 'copy /y "hosts" "%WINDIR%\System32\drivers\etc\hosts"', weight: 20 }
+# Necessary to clean DNS Cache after modifying hosts
+  - !cmd: { command: 'ipconfig /flushdns' }
+# Activate a custom high performance powerplan before we proceed to prevent sleep 
+  - !writeStatus: {status: "Configuring a power plan"}
+  - !run: {exe: "powercfg", args: "/hibernate off"}
+  - !run: {exe: "powercfg", args: "-duplicatescheme e9a42b02-d5df-448d-aa00-03f14749eb61 3ff9831b-6f80-4830-8178-736cd4229e7b"}
+  - !run: {exe: "powercfg", args: "-changename 3ff9831b-6f80-4830-8178-736cd4229e7b \"Starlight - Ultra Performance\" \"Windows's Ultimate Performance with additional changes.\""}
+  - !run: {exe: "powercfg", args: "-s 3ff9831b-6f80-4830-8178-736cd4229e7b"}
+  - !run: {exe: "powercfg", args: "-setacvalueindex scheme_current sub_processor PERFINCPOL 2"}
+  - !run: {exe: "powercfg", args: "-setacvalueindex scheme_current sub_processor PERFDECPOL 1"}
+  - !run: {exe: "powercfg", args: "-setacvalueindex scheme_current sub_processor PERFINCTHRESHOLD 10"}
+  - !run: {exe: "powercfg", args: "-setacvalueindex scheme_current sub_processor PERFDECTHRESHOLD 8"}
+  - !run: {exe: "powercfg", args: "-setacvalueindex scheme_current sub_processor CPMINCORES 100"}
+  - !run: {exe: "powercfg", args: "-setacvalueindex scheme_current sub_processor CPMINCORES1 100"} # on hybrid CPUs, '1' at the end of the setting name is for P-cores
+  - !run: {exe: "powercfg", args: "/setactive scheme_current"}
+# Powershell Optimization
+  - !writeStatus: {status: "Optimizing PowerShell"}
+  - !run:
+    exeDir: true
+    exe: "PowerShell"
+    args: '-NoP -ExecutionPolicy Bypass -File ngen.ps1'
+    weight: 100
+# Install Chocolately and apps
+  - !writeStatus: {status: "Installing Chocolatey + apps"}
+  - !run:
+    exeDir: true
+    exe: "PowerShell"
+    args: '-NoP -ExecutionPolicy Bypass -File chocolateyApps.ps1'
+    weight: 100
